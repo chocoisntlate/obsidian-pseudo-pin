@@ -1,36 +1,34 @@
-import {App, PluginSettingTab, Setting} from "obsidian";
-import MyPlugin from "./main";
+import PseudoPinPlugin from "main";
+import { App, PluginSettingTab, Setting } from "obsidian";
 
-export interface MyPluginSettings {
-	mySetting: string;
-}
+export class PseudoPinPluginSettingsTab extends PluginSettingTab {
+	plugin: PseudoPinPlugin;
 
-export const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
-}
-
-export class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
-
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: PseudoPinPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
 
 	display(): void {
-		const {containerEl} = this;
-
+		const { containerEl } = this;
 		containerEl.empty();
 
+		containerEl.createEl("h2", { text: "Behavior" });
+
 		new Setting(containerEl)
-			.setName('Settings #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
+			.setName("Choose opening method")
+			.setDesc("")
+			.addDropdown((dropdown: any) => {
+				dropdown
+					.addOption("Quick switcher", "Core obsidian plugin")
+					.addOption("Omnisearch", "Community plugin")
+					.setValue(this.plugin.settings.openMethod)
+					.onChange(async (value: any) => {
+						this.plugin.settings.openMethod = value;
+						await this.plugin.saveSettings();
+						this.plugin.registerOpeningMethod();
+					});
+			});
 	}
+
 }
