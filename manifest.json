@@ -3,7 +3,7 @@
 	"name": "Pseudo Pin",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Temporarily unpins pinned tabs",
+	"description": "Temporarily unpins pinned tabs.",
 	"author": "chocoisntlate",
 	"authorUrl": "https://github.com/chocoisntlate",
 	"isDesktopOnly": false
