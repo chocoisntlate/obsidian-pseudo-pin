@@ -48,8 +48,8 @@ export class PseudoPinPluginSettingsTab extends PluginSettingTab {
     customSettingContainer = containerEl.createDiv();
 
     new Setting(customSettingContainer)
-      .setName("Custom command id")
-      .setDesc("Enter command id of the opening method, refer to docs for help.")
+      .setName("Custom command ID")
+      .setDesc("Enter the command ID of the opening method. Refer to the docs for help with finding command IDs.")
       .addText((text) => {
         text
           .setPlaceholder("e.g. " + QUICK_SWITCHER_COMMAND_ID)
