@@ -21,7 +21,7 @@ export class PinBypass {
         this.openCommandId = openMethodCommandIdMapping[openMethod];
     }
 
-    run(): void {
+    runWithOpenMethod(): void {
         const leaf = this.app.workspace.getMostRecentLeaf();
         if (!leaf) return;
 
@@ -30,6 +30,19 @@ export class PinBypass {
             (this.app as any).commands.executeCommandById(this.openCommandId); // exists at runtime
             return;
         }
+
+        this.unpinAndWaitToRepin();
+
+        // open
+        (this.app as any).commands.executeCommandById(this.openCommandId);
+    }
+
+    unpinAndWaitToRepin(): void {
+        const leaf = this.app.workspace.getMostRecentLeaf();
+        if (!leaf) return;
+
+        const isPinned = leaf.getViewState().pinned;
+        if (!isPinned) return;
 
         // unpin
         leaf.setPinned(false);
@@ -41,16 +54,12 @@ export class PinBypass {
             this.app.workspace.off("modal-close", repin);
             this.app.workspace.off("active-leaf-change", repin);
             this.app.workspace.off("window-close", repin);
-        }
+        };
 
         // listeners
         this.app.workspace.on("file-open", repin);
         this.app.workspace.on("active-leaf-change", repin);
         this.app.workspace.on("window-close", repin);
-
-        // open
-        (this.app as any).commands.executeCommandById(this.openCommandId);
-
     }
 
 }   

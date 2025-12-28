@@ -4,10 +4,12 @@ import { PseudoPinPluginSettingsTab } from 'settings';
 
 export interface PseudoPinPluginSettings {
     openMethod: string;
+    hideTabBar: boolean;
 }
 
 const DEFAULT_SETTINGS: PseudoPinPluginSettings = {
     openMethod: 'Quick switcher',
+    hideTabBar: false,
 }
 
 const openMethodCommandIdMapping: Record<string, string> = {
@@ -26,14 +28,26 @@ export default class PseudoPinPlugin extends Plugin {
         this.pinBypass = new PinBypass(this.app, this.settings.openMethod)
 
         this.addCommand({
-            id: 'pseudo-pin-open',
-            name: 'Open with Pseudo Pin',
-            callback: () => this.pinBypass.run()
+            id: 'pseudo-pin-unpin-and-trigger-open-method',
+            name: 'Unpin current file, trigger open method, and wait to repin',
+            callback: () => this.pinBypass.runWithOpenMethod()
         });
+
+        this.addCommand({
+            id: 'pseudo-pin-unpin-only',
+            name: 'Unpin current file and wait to repin',
+            callback: () => this.pinBypass.unpinAndWaitToRepin()
+        })
+
+        this.registerTabBarVisibility();
     }
 
     registerOpeningMethod(): void {
         this.pinBypass.setOpenMethod(this.settings.openMethod);
+    }
+
+    registerTabBarVisibility(): void {
+        document.body.classList.toggle("pseudo-pin-hide-tab-bar", this.settings.hideTabBar);
     }
 
 	async loadSettings() {
