@@ -49,7 +49,7 @@ export class PseudoPinPluginSettingsTab extends PluginSettingTab {
 
     new Setting(customSettingContainer)
       .setName("Custom command ID")
-      .setDesc("Enter the command ID of the opening method. Refer to the docs for help with finding command IDs.")
+      .setDesc("Enter the command ID of the opening method. Refer to the docs for help.")
       .addText((text) => {
         text
           .setPlaceholder("e.g. " + QUICK_SWITCHER_COMMAND_ID)
