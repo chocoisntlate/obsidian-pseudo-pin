@@ -20,8 +20,8 @@ export class PseudoPinPluginSettingsTab extends PluginSettingTab {
 			.setDesc("")
 			.addDropdown((dropdown: any) => {
 				dropdown
-					.addOption("Quick switcher", "Core obsidian plugin")
-					.addOption("Omnisearch", "Community plugin")
+					.addOption("Quick switcher", "Quick switcher")
+					.addOption("Omnisearch", "Omnisearch")
 					.setValue(this.plugin.settings.openMethod)
 					.onChange(async (value: any) => {
 						this.plugin.settings.openMethod = value;
@@ -29,6 +29,21 @@ export class PseudoPinPluginSettingsTab extends PluginSettingTab {
 						this.plugin.registerOpeningMethod();
 					});
 			});
+
+		containerEl.createEl("h2", { text: "Appearance" });
+
+		new Setting(containerEl)
+			.setName("Hide tab bar")
+			.setDesc("Visually hide tab bar. Might look off with some themes.")
+			.addToggle((toggle) =>
+				toggle
+					.setValue((this.plugin as any).settings.hideTabBar)
+					.onChange(async (value) => {
+						(this.plugin as any).settings.hideTabBar = value;
+						await this.plugin.saveSettings();
+						(this.plugin as any).registerTabBarVisibility();
+					})
+			);
 	}
 
 }
