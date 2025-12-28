@@ -1,24 +1,19 @@
 import { App } from "obsidian";
 
-const openMethodCommandIdMapping: Record<string, string> = {
-    'Quick switcher': 'switcher:open',
-    'Omnisearch': 'omnisearch:open',
-}
-
 export class PinBypass {
     app: App;
-    openCommandId: string | undefined;
+    openMethodCommandId: string | undefined;
 
     constructor(
         app: App,
-        openMethod: string
+        openMethodCommandId: string
     ) {
         this.app = app;
-        this.openCommandId = openMethodCommandIdMapping[openMethod];
+        this.openMethodCommandId = openMethodCommandId;
     }
 
-    setOpenMethod(openMethod: string): void {
-        this.openCommandId = openMethodCommandIdMapping[openMethod];
+    setOpenMethod(openMethodCommandId: string): void {
+        this.openMethodCommandId = openMethodCommandId;
     }
 
     runWithOpenMethod(): void {
@@ -27,14 +22,14 @@ export class PinBypass {
 
         const isPinned = leaf.getViewState().pinned;
         if (!isPinned) {
-            (this.app as any).commands.executeCommandById(this.openCommandId); // exists at runtime
+            (this.app as any).commands.executeCommandById(this.openMethodCommandId); // exists at runtime
             return;
         }
 
         this.unpinAndWaitToRepin();
 
         // open
-        (this.app as any).commands.executeCommandById(this.openCommandId);
+        (this.app as any).commands.executeCommandById(this.openMethodCommandId);
     }
 
     unpinAndWaitToRepin(): void {
