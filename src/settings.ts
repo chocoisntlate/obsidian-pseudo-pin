@@ -17,13 +17,13 @@ export class PseudoPinPluginSettingsTab extends PluginSettingTab {
     const { containerEl } = this;
     containerEl.empty();
 
-    containerEl.createEl("h2", { text: "Behavior" });
+    new Setting(containerEl).setHeading().setName("Behavior");
 
     let customSettingContainer: HTMLElement;
 
     new Setting(containerEl)
       .setName("Opening method")
-      .setDesc("Choose opening method used in the command")
+      .setDesc("Choose opening method used in the command.")
       .addDropdown((dropdown) => {
         dropdown
           .addOption(QUICK_SWITCHER_COMMAND_ID, "Quick switcher")
@@ -48,10 +48,8 @@ export class PseudoPinPluginSettingsTab extends PluginSettingTab {
     customSettingContainer = containerEl.createDiv();
 
     new Setting(customSettingContainer)
-      .setName("Custom command ID")
-      .setDesc(
-        "Enter the command ID of the opening method. Refer to docs for help with finding command IDs."
-      )
+      .setName("Custom command id")
+      .setDesc("Enter command id of the opening method, refer to docs for help.")
       .addText((text) => {
         text
           .setPlaceholder("e.g. " + QUICK_SWITCHER_COMMAND_ID)
@@ -70,8 +68,7 @@ export class PseudoPinPluginSettingsTab extends PluginSettingTab {
       });
 
     // visibility of custom command ID input
-    if (this.plugin.settings.openMethodCommandId !== "custom") {
-      customSettingContainer.style.display = "none";
-    }
+	const enableCustom = this.plugin.settings.openMethodCommandId === "custom";
+	customSettingContainer.classList.toggle("hidden", !enableCustom);
   }
 }

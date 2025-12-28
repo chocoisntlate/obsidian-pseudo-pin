@@ -7,6 +7,10 @@ If your plugin does not need CSS, delete this file.
 
 */
 
+.hidden {
+    display: none;
+}
+
 .pseudo-pin-hide-tab-bar .mod-root .workspace-tabs .workspace-tab-header-container  {
     display: none !important;
 }

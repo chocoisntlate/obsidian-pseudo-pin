@@ -27,13 +27,13 @@ export default class PseudoPinPlugin extends Plugin {
 
     registerCommands() {
         this.addCommand({
-            id: 'pseudo-pin-unpin-and-trigger-open-method',
+            id: 'unpin-and-trigger-open-method',
             name: 'Unpin current file, trigger open method, and wait to repin',
             callback: () => this.pinBypass.runWithOpenMethod()
         });
 
         this.addCommand({
-            id: 'pseudo-pin-unpin-only',
+            id: 'unpin-only',
             name: 'Unpin current file and wait to repin',
             callback: () => this.pinBypass.unpinAndWaitToRepin()
         })
@@ -43,9 +43,14 @@ export default class PseudoPinPlugin extends Plugin {
         this.pinBypass.setOpenMethod(this.settings.openMethodCommandId);
     }
 
-	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
+    async loadSettings() {
+        this.settings = Object.assign(
+            {},
+            DEFAULT_SETTINGS,
+            (await this.loadData()) ?? {}
+        );
+    }
+
 
 	async saveSettings() {
 		await this.saveData(this.settings);

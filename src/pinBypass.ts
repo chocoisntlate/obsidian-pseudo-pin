@@ -1,13 +1,16 @@
 import { App } from "obsidian";
 
+interface AppWithCommands extends App {
+	commands: {
+		executeCommandById(commandId: string): boolean;
+	};
+}
+
 export class PinBypass {
     app: App;
     openMethodCommandId: string | undefined;
 
-    constructor(
-        app: App,
-        openMethodCommandId: string
-    ) {
+    constructor(app: App,openMethodCommandId: string) {
         this.app = app;
         this.openMethodCommandId = openMethodCommandId;
     }
@@ -22,14 +25,19 @@ export class PinBypass {
 
         const isPinned = leaf.getViewState().pinned;
         if (!isPinned) {
-            (this.app as any).commands.executeCommandById(this.openMethodCommandId); // exists at runtime
+            this.executedOpenCommand();
             return;
         }
 
         this.unpinAndWaitToRepin();
+        this.executedOpenCommand();
+    }
 
-        // open
-        (this.app as any).commands.executeCommandById(this.openMethodCommandId);
+    private executedOpenCommand(): void {
+        if (!this.openMethodCommandId) return;
+
+        const appWithCommands = this.app as unknown as AppWithCommands;
+        appWithCommands.commands.executeCommandById(this.openMethodCommandId);
     }
 
     unpinAndWaitToRepin(): void {
@@ -56,5 +64,4 @@ export class PinBypass {
         this.app.workspace.on("active-leaf-change", repin);
         this.app.workspace.on("window-close", repin);
     }
-
-}   
+}
